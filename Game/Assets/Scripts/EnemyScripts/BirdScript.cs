@@ -88,6 +88,8 @@ public class BirdScript : MonoBehaviour
     {
         if (collision.tag == MyTags.BULLET_TAG)
         {
+            Score.scoreCount += 30;
+            GetComponent<BoxCollider2D>().enabled = false;
             anim.Play("BirdDead");
             GetComponent<BoxCollider2D>().isTrigger = true;
             myBody.bodyType = RigidbodyType2D.Dynamic;

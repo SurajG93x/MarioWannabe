@@ -10,6 +10,9 @@ public class FrogScript : MonoBehaviour
 
     private int jumpNum;
     private string coroutineName = "FrogJump";
+
+    public LayerMask playerLayer;
+    private GameObject player;
     // Start is called before the first frame update
 
     private void Awake()
@@ -20,8 +23,16 @@ public class FrogScript : MonoBehaviour
     void Start()
     {
         StartCoroutine(FrogJump());
+        player = GameObject.FindGameObjectWithTag(MyTags.PLAYER_TAG);
     }
 
+    private void Update()
+    {
+        if (Physics2D.OverlapCircle(transform.position, 0.5f, playerLayer))
+        {
+            player.GetComponent<PlayerDamage>().DealDamage();
+        }
+    }
     // Update is called once per frame
     void LateUpdate()
     {
@@ -64,7 +75,7 @@ public class FrogScript : MonoBehaviour
         {
             anim.Play("FrogIdleRight");
         }
-
+ 
         if (jumpNum == 3)
         {
             jumpNum = 0;

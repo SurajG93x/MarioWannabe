@@ -7,6 +7,7 @@ public class SpiderScript : MonoBehaviour
     private Animator anim;
     private Rigidbody2D myBody;
     private Vector3 moveDir = Vector3.down;
+    public float moveTime = 3f;
 
     private string coroutineName = "ChangeDir";
 
@@ -34,7 +35,7 @@ public class SpiderScript : MonoBehaviour
 
     IEnumerator ChangeDir()
     {
-        yield return new WaitForSeconds(Random.Range(2f, 5f));
+        yield return new WaitForSeconds(moveTime);
 
         if (moveDir == Vector3.down)
         {
@@ -68,9 +69,16 @@ public class SpiderScript : MonoBehaviour
         {
             anim.Play("Dead");
             myBody.bodyType = RigidbodyType2D.Dynamic;
+            GetComponent<BoxCollider2D>().enabled = false;
+            Score.scoreCount += 15;
 
             StartCoroutine(SpiderDead());
             StopCoroutine(ChangeDir());
+        }
+
+        if (collision.tag == MyTags.PLAYER_TAG)
+        {
+            collision.GetComponent<PlayerDamage>().DealDamage();
         }
     }
 }

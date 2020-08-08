@@ -66,11 +66,14 @@ public class SnailScript : MonoBehaviour
                     myBody.velocity = new Vector2(0, 0);
                     anim.Play("Dead");
                     stunned = true;
+                    Score.scoreCount += 10;
 
-                    if(tag == MyTags.BEETLE_TAG)
+                    if (tag == MyTags.BEETLE_TAG)
                     {
                         anim.Play("Dead");
+                        Score.scoreCount += 10;
                         StartCoroutine(Dead(0.5f));
+                        GetComponent<BoxCollider2D>().enabled = false;
                     }
                 }
             }
@@ -82,7 +85,7 @@ public class SnailScript : MonoBehaviour
             {
                 if (!stunned)
                 {
-                    //Kill
+                    leftHit.collider.gameObject.GetComponent<PlayerDamage>().DealDamage();
                 }
                 else
                 {
@@ -98,10 +101,10 @@ public class SnailScript : MonoBehaviour
         if (rightHit)
         {
             if (rightHit.collider.tag == MyTags.PLAYER_TAG)
-            {
+            {   
                 if (!stunned)
                 {
-                    //Kill
+                    rightHit.collider.gameObject.GetComponent<PlayerDamage>().DealDamage();
                 }
                 else
                 if (tag == MyTags.SNAIL_TAG)
@@ -154,6 +157,8 @@ public class SnailScript : MonoBehaviour
                 canMove = false;
                 myBody.velocity = new Vector2(0, 0);
                 StartCoroutine(Dead(0.4f));
+                Score.scoreCount += 10;
+                GetComponent<BoxCollider2D>().enabled = false;
             }
 
             if(tag == MyTags.SNAIL_TAG)
@@ -164,6 +169,7 @@ public class SnailScript : MonoBehaviour
                     myBody.velocity = new Vector2(0, 0);
                     anim.Play("Dead");
                     stunned = true;
+                    Score.scoreCount += 10;
                 }
                 else
                 {
