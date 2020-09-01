@@ -11,4 +11,7 @@ public class MyTags : MonoBehaviour
     public static string BULLET_TAG = "Bullet";
     public static string SPIDER_TAG = "Spider";
     public static string COIN_TAG = "Coins";
+    public static string BOSS_TAG = "Boss";
+    public static string HAZARD_TAG = "Hazard";
+    public static string GHOST_TAG = "Ghost";
 }

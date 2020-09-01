@@ -1,13 +1,12 @@
 ﻿using Cinemachine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerDamage : MonoBehaviour
 {
     [SerializeField] public CinemachineVirtualCamera vcam;
-    [SerializeField] AudioSource gameOverSound;
+    [SerializeField] private AudioSource gameOverSound;
 
     private Text lifeText;
     private int lives;
@@ -26,16 +25,6 @@ public class PlayerDamage : MonoBehaviour
 
         canDamage = true;
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void DealDamage()
     {
@@ -50,15 +39,34 @@ public class PlayerDamage : MonoBehaviour
 
             if (lives < 0)
             {
-                playerCollider.isTrigger = true;
-                vcam.gameObject.SetActive(false);
-                gameOverSound.Play();
-                StartCoroutine(killPlayer());
+                PlayerDie();
             }
 
             canDamage = false;
             StartCoroutine(WaitForDamage());
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == MyTags.HAZARD_TAG)
+        {
+            PlayerDie();
+        }
+    }
+
+    void PlayerDie()
+    {
+        playerCollider.isTrigger = true;
+        vcam.gameObject.SetActive(false);
+        gameObject.GetComponent<PlayerMove>().canMove = false;
+        gameOverSound.Play();
+        StartCoroutine(killPlayer());
+    }
+
+    public void PlayerHurt()
+    {
+
     }
 
     IEnumerator WaitForDamage()

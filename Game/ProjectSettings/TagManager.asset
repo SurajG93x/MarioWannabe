@@ -12,6 +12,9 @@ TagManager:
   - Coins
   - Hazard
   - Goal
+  - Boss
+  - Shoot
+  - Ghost
   layers:
   - Default
   - TransparentFX

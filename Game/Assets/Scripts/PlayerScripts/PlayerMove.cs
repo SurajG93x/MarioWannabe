@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -8,6 +6,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] float jumpForce = 5f;
+    [SerializeField] private AudioSource jumpAudio;
+
+    public bool canMove;
 
     private Rigidbody2D playerBody;
     private Animator anim;
@@ -18,23 +19,25 @@ public class PlayerMove : MonoBehaviour
     {
         playerBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-    }
-
-    void Start()
-    {
-        
+        canMove = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        GroundCheck();
-        PlayerJump();
+        if (canMove)
+        {
+            GroundCheck();
+            PlayerJump();
+        }
     }
 
     void FixedUpdate()
     {
-        PlayerWalk();
+        if (canMove)
+        {
+            PlayerWalk();
+        }
     }
 
     void PlayerWalk()
@@ -86,10 +89,23 @@ public class PlayerMove : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Space))
             {
+                jumpAudio.Play();
                 jump = true;
                 playerBody.velocity = new Vector2(playerBody.velocity.x, jumpForce);    //player x-axis velocity (moving or idle), jump force y-axis
                 anim.SetBool("jump", true);
             }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == MyTags.GROUND_TAG)
+            this.transform.parent = collision.transform;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == MyTags.GROUND_TAG)
+            this.transform.parent = null;
     }
 }

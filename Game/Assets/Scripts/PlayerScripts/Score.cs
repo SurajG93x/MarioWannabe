@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Score : MonoBehaviour
@@ -9,10 +6,6 @@ public class Score : MonoBehaviour
     private Text coinScore;
     public AudioSource audioManager;
     public static int scoreCount;
-
-    private void Awake()
-    {
-    }
 
     // Start is called before the first frame update
     void Start()

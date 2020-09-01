@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class FireBullet : MonoBehaviour
 {
-
-    private float speed = 10f;
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private AudioSource fireSound;
+    [SerializeField] private AudioSource explodeSound;
     private Animator anim;
     private bool canMove;
     // Start is called before the first frame update
 
     private void Awake()
     {
+        fireSound.Play();
         anim = GetComponent<Animator>();    
     }
 
@@ -57,8 +59,11 @@ public class FireBullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == MyTags.BEETLE_TAG || collision.gameObject.tag == MyTags.SNAIL_TAG || collision.gameObject.tag == MyTags.SPIDER_TAG)
+        if(collision.gameObject.tag == MyTags.BEETLE_TAG || collision.gameObject.tag == MyTags.SNAIL_TAG || 
+            collision.gameObject.tag == MyTags.SPIDER_TAG || collision.gameObject.tag == MyTags.BOSS_TAG || 
+            collision.gameObject.tag == MyTags.GHOST_TAG)
         {
+            explodeSound.Play();
             anim.Play("BulletExplode");
             canMove = false;
             StartCoroutine(DisableBullet(0.2f));

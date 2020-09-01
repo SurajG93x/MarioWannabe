@@ -5,11 +5,21 @@ using UnityEngine;
 public class PlayerShoot : MonoBehaviour
 {
     [SerializeField] private GameObject bullet;
-    // Start is called before the first frame update
-    
+
+    public bool canShoot;
+
+    private void Awake()
+    {
+        canShoot = false;
+    }
+
     void Update()
     {
-        Shoot();
+        if (canShoot)
+        {
+            Shoot();
+            StartCoroutine(ShootTimer());
+        }
     }
 
     void Shoot()
@@ -19,5 +29,11 @@ public class PlayerShoot : MonoBehaviour
             GameObject fireBullet = Instantiate(bullet, transform.position, Quaternion.identity);
             fireBullet.GetComponent<FireBullet>().Speed *= transform.localScale.x;
         }
+    }
+
+    IEnumerator ShootTimer()
+    {
+        yield return new WaitForSeconds(5f);
+        canShoot = false;
     }
 }
