@@ -15,6 +15,7 @@ public class SnailScript : MonoBehaviour
     private bool leftMove;                                    //To check if the enemy is moving or not (dead)
     private bool canMove;
     private bool stunned;
+    private float startPos;
 
     void Awake()
     {
@@ -24,6 +25,7 @@ public class SnailScript : MonoBehaviour
         //To make sure that the positions of these change when the snail changes direction (in change direction)
         leftColPosition = leftCol.position;
         rightColPosition = rightCol.position;
+        startPos = gameObject.transform.position.x;
     }
     void Start()
     {
@@ -51,6 +53,11 @@ public class SnailScript : MonoBehaviour
 
     void navigationCheck()
     {
+        if (Mathf.Abs(gameObject.transform.position.x) - Mathf.Abs(startPos) > 5)
+        {
+            ChangeDir();
+        }
+
         RaycastHit2D leftHit = Physics2D.Raycast(leftCol.position, Vector2.left, 0.1f, playerLayer);
         RaycastHit2D rightHit = Physics2D.Raycast(rightCol.position, Vector2.right, 0.1f, playerLayer);
         Collider2D topHit = Physics2D.OverlapCircle(topCol.position, 0.2f, playerLayer);
@@ -145,6 +152,14 @@ public class SnailScript : MonoBehaviour
     {
         yield return new WaitForSeconds(timer);
         gameObject.SetActive(false);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Hazard")
+        {
+            ChangeDir();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
